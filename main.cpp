@@ -135,7 +135,7 @@ int main(int argc, char *argv[])
 
     /* Read N bytes into BUF from socket FD.
         Returns the number read or -1 for errors.*/
-    if ((numbytes = recv(sockfd, buf, MAXDATASIZE-1, 0)) == -1) {
+    /*if ((numbytes = recv(sockfd, buf, MAXDATASIZE-1, 0)) == -1) {
         perror("recv failed to read bytes into BUF from socket FD");
         exit(1);
     }
@@ -144,7 +144,13 @@ int main(int argc, char *argv[])
 
     printf("client: received '%s'\n",buf);
 
+    close(sockfd);*/
+
+
+    if (send(sockfd, "Hello, world!", 13, 0) == -1)
+        perror("send");
     close(sockfd);
+    exit(0);
 
     return 0;
 }
