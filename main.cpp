@@ -14,9 +14,16 @@
 
 #include <arpa/inet.h>
 
+//////////Added ///////////////////
+#include <iostream>
+#include <fstream>
+
+using namespace std;
+///////////////////////
+
 #define PORT "3490" // the port client will be connecting to
 
-#define MAXDATASIZE 100 // max number of bytes we can get at once
+#define MAXDATASIZE 50 // max number of bytes we can get at once
 
 // get sockaddr, IPv4 or IPv6:
 //The kernel supplies this value.  You can get IPV4 or IPV6.
@@ -35,7 +42,7 @@ void *get_in_addr(struct sockaddr *sa)
 int main(int argc, char *argv[])
 {
     int sockfd, numbytes;   // listen on sock_fd
-    char buf[MAXDATASIZE];
+    char buf[MAXDATASIZE + 1];//Add 1 since the last char must be a null char.
     struct addrinfo hints, *servinfo, *p;
     /*
      * Used to prep the socket address structures for invention.
@@ -146,11 +153,40 @@ int main(int argc, char *argv[])
 
     close(sockfd);*/
 
+    ifstream ifs("/home/kristopher/Documents/TestTextFile/ZeroToNine.txt", ios::in | ios::ate);
+    int fileLength = ifs.tellg();
+    int numOfTransmissions = (fileLength % MAXDATASIZE == 0) ? fileLength / MAXDATASIZE : fileLength / MAXDATASIZE + 1;
 
-    if (send(sockfd, "01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789", 200, 0) == -1)
+    ifs.seekg(0, ios::beg);//Go back to beginning.
+    if (ifs.good())
+    {
+        int overallCharLoc = 0;
+        unsigned char *charArray = new unsigned char[MAXDATASIZE + 1];
+        charArray[MAXDATASIZE] = '\0';
+        for (int currTrans = 0; currTrans < numOfTransmissions; currTrans++)
+        {
+            char character;
+            int charNum = 0;
+            while(ifs.get(character) && charNum != MAXDATASIZE)
+            {
+                charArray[charNum++] = character;
+            }
+            if (send(sockfd, charArray, charNum, 0) == -1)
+                perror("Sending failed.");
+            sleep(2);
+
+        }
+        close(sockfd);
+        exit(0);
+    }
+
+
+    /*
+    if (send(sockfd, "", , 0) == -1)
         perror("send");
     close(sockfd);
     exit(0);
+    */
 
     return 0;
 }
