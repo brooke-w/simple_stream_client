@@ -1,3 +1,0 @@
-/home/nick/Documents/GitProjects/simple_stream_client/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/nick/Documents/GitProjects/simple_stream_client/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/nick/Documents/GitProjects/simple_stream_client/cmake-build-debug/CMakeFiles/simple_stream_client.dir
