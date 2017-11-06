@@ -23,7 +23,7 @@ using namespace std;
 
 #define PORT "3490" // the port client will be connecting to
 
-#define MAXDATASIZE 50 // max number of bytes we can get at once
+#define MAXDATASIZE 728 // max number of bytes we can get at once
 
 // get sockaddr, IPv4 or IPv6:
 //The kernel supplies this value.  You can get IPV4 or IPV6.
@@ -153,7 +153,7 @@ int main(int argc, char *argv[])
 
     close(sockfd);*/
 
-    ifstream ifs("/home/kristopher/Documents/TestTextFile/ZeroToNine.txt", ios::in | ios::ate);
+    ifstream ifs("/home/kristopher/Documents/TestTextFile/KingJames.txt", ios::in | ios::ate);
     int fileLength = ifs.tellg();
     int numOfTransmissions = (fileLength % MAXDATASIZE == 0) ? fileLength / MAXDATASIZE : fileLength / MAXDATASIZE + 1;
 
@@ -167,13 +167,12 @@ int main(int argc, char *argv[])
         {
             char character;
             int charNum = 0;
-            while(ifs.get(character) && charNum != MAXDATASIZE)
+            while(charNum != MAXDATASIZE && ifs.get(character) )
             {
                 charArray[charNum++] = character;
             }
             if (send(sockfd, charArray, charNum, 0) == -1)
                 perror("Sending failed.");
-            sleep(2);
 
         }
         close(sockfd);
